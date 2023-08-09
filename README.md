@@ -134,6 +134,91 @@ Expected a different answer? Re-generate any response of your choosing.
 
 See the [open issues][open-issues] for a full list of proposed features (and known issues).
 
+## Development
+**core class**
+
+```xml
+<extensions defaultExtensionNs="com.intellij">
+<!--    插件启动-->
+    <postStartupActivity implementation="ee.carlrobert.codegpt.PluginStartupActivity"/>
+<!--    配置项tools-codegpt-->
+    <applicationConfigurable id="settings.codegpt" parentId="tools" displayName="CodeGPT"
+                             instance="ee.carlrobert.codegpt.state.settings.SettingsConfigurable"/>
+<!--    配置项tools-codegpt-configuration-->
+    <applicationConfigurable id="settings.codegpt.configuration" parentId="settings.codegpt" displayName="Configuration"
+                             instance="ee.carlrobert.codegpt.state.settings.configuration.ConfigurationConfigurable"/>
+<!--    配置项tools-codegpt-advanced-->
+    <applicationConfigurable id="settings.codegpt.advanced" parentId="settings.codegpt" displayName="Advanced Settings"
+                             instance="ee.carlrobert.codegpt.state.settings.advanced.AdvancedSettingsConfigurable"/>
+<!--    服务settingsState-->
+    <applicationService serviceImplementation="ee.carlrobert.codegpt.state.settings.SettingsState"/>
+<!--    服务configurationState-->
+    <applicationService serviceImplementation="ee.carlrobert.codegpt.state.settings.configuration.ConfigurationState"/>
+<!--    服务advanceSettingsState-->
+    <applicationService serviceImplementation="ee.carlrobert.codegpt.state.settings.advanced.AdvancedSettingsState"/>
+<!--    服务conversationState-->
+    <applicationService serviceImplementation="ee.carlrobert.codegpt.state.conversations.ConversationsState"/>
+<!--    项目服务chatContentManagerService-->
+    <projectService serviceImplementation="ee.carlrobert.codegpt.toolwindow.chat.ChatContentManagerService"/>
+<!--    工具栏-->
+    <toolWindow id="CodeGPT" icon="Icons.ToolWindowIcon" anchor="right"
+                factoryClass="ee.carlrobert.codegpt.toolwindow.ProjectToolWindowFactory"/>
+</extensions>
+```
+
+
+
+
+
+* action - 右键菜单动作
+  * ActionsUtil.java - 注册、刷新
+  * AskAction.java - 注册Ask ChatGpt动作
+  * BaseAction.java 
+  * CustomPromptAction.java 
+  * CustomPromptDialog.java - 自定义提示词会话界面
+* client
+  * ActionListener.java 
+  * ClientProvider.java - openai客户端
+  * CompletionRequestProvider.java - 构建openai请求消息
+  * EventListener.java - openai响应结果处理
+  * RequestHandler.java - 封装请求重试、取消
+  * TotalUsageExceededException.java
+* state
+  * conversations
+    * converter
+    * message
+    * Conversation.java 
+    * ConversationsContainer.java 
+    * ConversationsState.java - 会话状态
+  * settings
+    * advanced - 次级设置状态2
+    * components - 子模块界面绘制
+    * configuration - 次级设置状态1
+    * BaseModelComboBox.java 
+    * SettingsComponent.java - 顶级设置状态 - 绘制界面
+    * SettingsConfigurable.java - 顶级设置状态 - 数据与界面交互
+    * SettingsState.java - 顶级设置状态 - 数据
+* toolwindow - swing绘制界面
+  * chat
+    * action
+    * html
+    * swing
+    * ChatContentManagerService.java - 会话内容门面类
+    * ChatTabbedPane.java
+    * ChatToolWindowPanel.java
+    * CloseableTabButton.java
+    * ToolWindowTabPanel.java
+    * ToolWindowTabPanelFactory.java
+  * components
+  * conversations - 工具栏窗口、会话窗口界面
+  * ProjectToolWindowFactory.java
+* util
+  * FileUtils.java 
+  * SwingUtils.java 
+  * ThemeUtils.java
+* EncodingManager.java
+* PluginStartupActivity.java - 插件启动
+
 ## License
 
 MIT © [Carl-Robert Linnupuu][portfolio]

@@ -9,6 +9,9 @@ group = "ee.carlrobert"
 version = "1.10.8"
 
 repositories {
+    maven {
+        url = uri("https://maven.aliyun.com/repository/public")
+    }
     mavenCentral()
 }
 
